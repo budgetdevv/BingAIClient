@@ -61,6 +61,11 @@ namespace BingAIClient // Note: actual namespace depends on the project name.
                 UserAgent = UserAgent
             });
 
+            Electron.App.WindowAllClosed += () =>
+            {
+                Environment.Exit(0);
+            };
+
             await App.WaitForShutdownAsync();
         }
     }
