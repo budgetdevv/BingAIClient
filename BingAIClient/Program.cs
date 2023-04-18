@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace BingAIClient // Note: actual namespace depends on the project name.
 {
-    internal class Program
+    internal static class Program
     {
         private static async Task Main(string[] Args)
         {
@@ -22,19 +22,7 @@ namespace BingAIClient // Note: actual namespace depends on the project name.
             await App.StartAsync();
 
             var WindowManager = Electron.WindowManager;
-
-            // BrowserWindow Window;
-            //
-            // try
-            // {
-            //     Window = await WindowManager.CreateWindowAsync();
-            // }
-            //
-            // catch (Exception Ex)
-            // {
-            //     Console.WriteLine(Ex);
-            // }
-
+            
             var Window = await WindowManager.CreateWindowAsync();
             
             var OS = Environment.OSVersion.Platform;
