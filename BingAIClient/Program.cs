@@ -65,7 +65,7 @@ namespace BingAIClient // Note: actual namespace depends on the project name.
 
             EApp.WindowAllClosed += () =>
             {
-                Environment.Exit(0);
+                Electron.App.Exit();
             };
 
             await App.WaitForShutdownAsync();
