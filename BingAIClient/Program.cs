@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using ElectronNET.API;
 using ElectronNET.API.Entities;
@@ -21,9 +23,9 @@ namespace BingAIClient // Note: actual namespace depends on the project name.
 
             await App.StartAsync();
 
-            var WindowManager = Electron.WindowManager;
+            var WindowsManager = Electron.WindowManager;
             
-            var Window = await WindowManager.CreateWindowAsync();
+            var Window = await WindowsManager.CreateWindowAsync();
             
             var OS = Environment.OSVersion.Platform;
 
@@ -51,8 +53,10 @@ namespace BingAIClient // Note: actual namespace depends on the project name.
                     break;
                 }
             }
+
+            Electron.App.UserAgentFallback = UserAgent;
             
-            Window.LoadURL("https://www.bing.com/search?q=Bing+AI&showconv=1", new LoadURLOptions()
+            Window.LoadURL("https://www.bing.com/rewards/authcheck?ru=%2Fmsrewards%2Fapi%2Fv1%2Fenroll%3Fpubl%3DBINGIP%26crea%3DMY00IA%26pn%3Dbingcopilotwaitlist%26partnerId%3DBingRewards%26pred%3Dtrue%26wtc%3DChatPaywall%26sessionId%3D3738576C319666AE1E81459B303A6708%26ru%3D%252fsearch%253fq%253dBing%252bAI%2526showconv%253d1%2526FORM%253dhpcodx%2526wlsso%253d0%2526scdexwlcs%253d1%2526scdexwlispw%253d1", new LoadURLOptions()
             {
                 UserAgent = UserAgent
             });
