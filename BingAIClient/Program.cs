@@ -25,7 +25,10 @@ namespace BingAIClient // Note: actual namespace depends on the project name.
 
             var WindowsManager = Electron.WindowManager;
             
-            var Window = await WindowsManager.CreateWindowAsync();
+            var Window = await WindowsManager.CreateWindowAsync(new BrowserWindowOptions()
+            {
+                TitleBarStyle = TitleBarStyle.hidden
+            });
             
             var OS = Environment.OSVersion.Platform;
 
