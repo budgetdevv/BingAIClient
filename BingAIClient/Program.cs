@@ -24,10 +24,13 @@ namespace BingAIClient // Note: actual namespace depends on the project name.
             await App.StartAsync();
 
             var WindowsManager = Electron.WindowManager;
+
+            const string Title = "Bing AI Client";
             
             var Window = await WindowsManager.CreateWindowAsync(new BrowserWindowOptions()
             {
-                TitleBarStyle = TitleBarStyle.hidden
+                TitleBarStyle = TitleBarStyle.defaultStyle,
+                Title = Title
             });
             
             var OS = Environment.OSVersion.Platform;
@@ -65,6 +68,11 @@ namespace BingAIClient // Note: actual namespace depends on the project name.
             {
                 UserAgent = UserAgent
             });
+
+            Window.OnPageTitleUpdated += _ =>
+            {
+                Window.SetTitle(Title);
+            };
 
             EApp.WindowAllClosed += () =>
             {
