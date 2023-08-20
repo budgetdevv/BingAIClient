@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using ElectronNET.API;
 using ElectronNET.API.Entities;
@@ -11,75 +9,75 @@ namespace BingAIClient // Note: actual namespace depends on the project name.
 {
     internal static class Program
     {
-        private static async Task Main(string[] Args)
+        private static async Task Main(string[] args)
         {
-            var Builder = WebApplication.CreateBuilder();
+            var builder = WebApplication.CreateBuilder();
 
-            Builder.WebHost.UseElectron(Args);
+            builder.WebHost.UseElectron(args);
 
-            Builder.Services.AddElectron();
+            builder.Services.AddElectron();
 
-            var App = Builder.Build();
+            var host = builder.Build();
 
-            await App.StartAsync();
+            await host.StartAsync();
 
-            var WindowsManager = Electron.WindowManager;
+            var windowsManager = Electron.WindowManager;
 
-            const string Title = "Bing AI Client";
+            const string TITLE = "Bing AI Client";
             
-            var Window = await WindowsManager.CreateWindowAsync(new BrowserWindowOptions()
+            var window = await windowsManager.CreateWindowAsync(new BrowserWindowOptions()
             {
                 TitleBarStyle = TitleBarStyle.defaultStyle,
-                Title = Title
+                Title = TITLE
             });
             
-            var OS = Environment.OSVersion.Platform;
+            var os = Environment.OSVersion.Platform;
 
-            string UserAgent;
+            string userAgent;
 
-            switch (OS) //https://www.whatismybrowser.com/guides/the-latest-user-agent/edge
+            switch (os) //https://www.whatismybrowser.com/guides/the-latest-user-agent/edge
             {
                 default:
                 case PlatformID.Win32NT:
                 {
-                    UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.48";
+                    userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.48";
                     break;
                 }
                 
                 case PlatformID.MacOSX:
                 case PlatformID.Unix:    
                 {
-                    UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_3_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.48";
+                    userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_3_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.48";
                     break;
                 }
                 
                 case PlatformID.Xbox:
                 {
-                    UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; Xbox; Xbox One) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edge/44.18363.8131";
+                    userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; Xbox; Xbox One) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edge/44.18363.8131";
                     break;
                 }
             }
 
-            var EApp = Electron.App;
+            var app = Electron.App;
             
-            EApp.UserAgentFallback = UserAgent;
+            app.UserAgentFallback = userAgent;
             
-            Window.LoadURL("https://www.bing.com/rewards/authcheck?ru=%2Fmsrewards%2Fapi%2Fv1%2Fenroll%3Fpubl%3DBINGIP%26crea%3DMY00IA%26pn%3Dbingcopilotwaitlist%26partnerId%3DBingRewards%26pred%3Dtrue%26wtc%3DChatPaywall%26sessionId%3D3738576C319666AE1E81459B303A6708%26ru%3D%252fsearch%253fq%253dBing%252bAI%2526showconv%253d1%2526FORM%253dhpcodx%2526wlsso%253d0%2526scdexwlcs%253d1%2526scdexwlispw%253d1", new LoadURLOptions()
+            window.LoadURL("https://www.bing.com/rewards/authcheck?ru=%2Fmsrewards%2Fapi%2Fv1%2Fenroll%3Fpubl%3DBINGIP%26crea%3DMY00IA%26pn%3Dbingcopilotwaitlist%26partnerId%3DBingRewards%26pred%3Dtrue%26wtc%3DChatPaywall%26sessionId%3D3738576C319666AE1E81459B303A6708%26ru%3D%252fsearch%253fq%253dBing%252bAI%2526showconv%253d1%2526FORM%253dhpcodx%2526wlsso%253d0%2526scdexwlcs%253d1%2526scdexwlispw%253d1", new LoadURLOptions()
             {
-                UserAgent = UserAgent
+                UserAgent = userAgent
             });
 
-            Window.OnPageTitleUpdated += _ =>
+            window.OnPageTitleUpdated += _ =>
             {
-                Window.SetTitle(Title);
+                window.SetTitle(TITLE);
             };
 
-            EApp.WindowAllClosed += () =>
+            app.WindowAllClosed += () =>
             {
                 Electron.App.Exit();
             };
 
-            await App.WaitForShutdownAsync();
+            await host.WaitForShutdownAsync();
         }
     }
 }
